@@ -1,0 +1,5 @@
+*.out
+*.png
+*.PNG
+*.txt
+__pycache__/**

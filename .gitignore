@@ -2,4 +2,5 @@
 *.png
 *.PNG
 *.txt
+*.o
 __pycache__/**

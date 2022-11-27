@@ -14,6 +14,7 @@ enum colors {BLUE,CYAN,GREY,PURPLE,GREENISH,MAGENTA,DEFAULT};
 constexpr unsigned int DEF_SIZE { 2048 };
 constexpr unsigned int DEF_MAX_IT { 50 };
 constexpr dbl DEF_WINDOW[2][2] = {{-2,2},{-2,2}};
+constexpr dbl DEF_EPS {1e-8};
 
 
 struct Color {
@@ -27,8 +28,8 @@ class Newton
 {
 
     public:
-        Newton(const vector<comp> & roots, unsigned int size = DEF_SIZE, unsigned int max_iteration = DEF_MAX_IT);
-        Newton(int n, unsigned int size = DEF_SIZE, unsigned int max_iteration = DEF_MAX_IT);
+        Newton(const vector<comp> & roots, unsigned int size = DEF_SIZE, unsigned int max_iteration = DEF_MAX_IT, dbl eps = DEF_EPS);
+        Newton(int n, unsigned int size = DEF_SIZE, unsigned int max_iteration = DEF_MAX_IT, dbl eps = DEF_EPS);
         dbl dist(const comp & z);
         unsigned int min_dist_index(const comp& z);
         comp getcomp(unsigned int x, unsigned int y, const dbl window[2][2]);

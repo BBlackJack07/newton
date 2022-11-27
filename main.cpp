@@ -6,9 +6,11 @@ void draw(const vector<Color> & matrix, unsigned int size, string path);
 int main(void)
 {
     //Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1.5 - 1.5i},4096,50);
-    Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1. - 1i, 1.1 - 1.1i},1024);
 
-    dbl window[2][2] = {{-0.4,0.2},{-1.,-0.4}}; // Intervals should have the same length
+
+    Newton newt(4);
+    dbl window[2][2] = {{-1.,1.},
+                        {-1.,1.}};
     vector<Color> fract(newt.generateFractal(window));
     
     draw(fract,newt.size(),"masterclass.bmp");

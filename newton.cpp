@@ -1,5 +1,37 @@
 #include "newton.hpp"
 
+void Color::setColor(unsigned char c, colors color)
+{
+    switch (color) {
+        case BLUE:
+            this->blue=c;
+            break;
+        case CYAN:
+            this->blue=c;
+            this->green=c;
+            break;
+        case GREY:
+            this->red=c;
+            this->blue=c;
+            this->green=c;
+            break;
+        case MAGENTA:
+            this->red=c;
+            this->blue=c;
+            break;
+        case PURPLE:
+            this->red = c/2;
+            this->blue = c;
+            break;
+        case GREENISH:
+            this->green=c;
+            this->blue=c/4;
+            break;
+        default:
+            this->red=c;
+    }
+}
+
 Newton::Newton(const vector<comp> & roots)
     :roots(roots), SIZE(2048), N(50), EPS(1e-8), SIZE_D(static_cast<dbl>(SIZE)) {}
 
@@ -111,26 +143,29 @@ vector<Color> Newton::generateFractal()
             // Determine color
             unsigned char c { static_cast<unsigned char>(255./pow(static_cast<dbl>(k+1),3./7.)) };
             auto i { min_dist_index(z) % roots.size() };
+            auto index {x*SIZE +y};
             switch (i) {
                 case 0:
-                    fractal[x*SIZE + y].blue = c;
+                    fractal[index].setColor(c,BLUE);
                     break;
                 case 1:
-                    fractal[x*SIZE + y].green = c;
-                    fractal[x*SIZE + y].blue = c;
+
+                    fractal[index].setColor(c,CYAN);
                     break;
                 case 2:
-                    fractal[x*SIZE + y].green = c;
-                    fractal[x*SIZE + y].blue = c;
-                    fractal[x*SIZE + y].red = c;
+                    fractal[index].setColor(c,GREY);
                     break;
                 case 3:
-                    fractal[x*SIZE + y].blue = c;
-                    fractal[x*SIZE + y].red = c;
+                    fractal[index].setColor(c,MAGENTA);
+                    break;
+                case 4:
+                    fractal[index].setColor(c,PURPLE);
+                    break;
+                case 5:
+                    fractal[index].setColor(c,GREENISH);
                     break;
                 default:
-                    fractal[x*SIZE + y].green = c/2;
-                    fractal[x*SIZE + y].red = c;
+                    fractal[index].setColor(c,DEFAULT);
             }
             
         }

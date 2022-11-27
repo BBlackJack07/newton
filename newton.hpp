@@ -9,9 +9,12 @@ using namespace std;
 typedef double dbl;
 typedef complex<dbl> comp;
 
+enum colors {BLUE,CYAN,GREY,PURPLE,GREENISH,MAGENTA,DEFAULT};
+
 struct Color {
     public:
         Color() :red(0),green(0),blue(0) {}
+        void setColor(unsigned char c, colors color);
         unsigned char red,green,blue;    
 };
 

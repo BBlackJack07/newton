@@ -1,13 +1,13 @@
-#include <iostream>
 #include "newton.hpp"
 #include "bitmap_image.hpp"
-#include <cmath>
 
 void draw(const vector<Color> & matrix, unsigned int size, string path);
 
 int main(void)
 {
-    Newton newt(5,4096,70);
+    //Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1.5 - 1.5i},4096,50);
+    Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1. - 1i, 1.1 - 1.1i},4096,50);
+
     vector<Color> fract(newt.generateFractal());
     
     draw(fract,newt.size(),"masterclass.bmp");

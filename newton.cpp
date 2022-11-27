@@ -32,13 +32,23 @@ void Color::setColor(unsigned char c, colors color)
     }
 }
 
-Newton::Newton(const vector<comp> & roots, unsigned int size, unsigned int max_iteration, dbl eps)
-    :roots(roots), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size)) {}
+Newton::Newton(const vector<comp> & roots_list, unsigned int size, unsigned int max_iteration, dbl eps)
+    :roots(roots_list), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size))
+{
+    bright_exponent = 1./static_cast<dbl>(roots.size()/2+1);
+    p = Newton::polyFromRoots(roots);
+    d = Newton::derive(p);
+}
 
 Newton::Newton(int n, unsigned int size, unsigned int max_iteration, dbl eps)
-    :roots(Newton::nth_roots(n)), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size)) {}
+    :roots(Newton::nth_roots(n)), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size))
+{
+    bright_exponent = 1./static_cast<dbl>(roots.size()/2+1);
+    p = Newton::polyFromRoots(roots);
+    d = Newton::derive(p);
+}
 
-vector<comp> Newton::polyFromRoots()
+vector<comp> Newton::polyFromRoots(const vector<comp> & roots)
 {
     auto n = roots.size(); 
     vector<comp> p(n+1,0.);
@@ -125,10 +135,8 @@ vector<comp> Newton::nth_roots(int n)
 vector<Color> Newton::generateFractal(const dbl window[2][2])
 {
     vector<Color> fractal(SIZE*SIZE);
-    vector<comp> p(polyFromRoots());
-    vector<comp> d(derive(p));
-    const dbl bright_exponent { 1./static_cast<dbl>(roots.size()/2+1) };
     dbl eps2 = EPS*EPS;
+
     for (unsigned int x {0}; x < SIZE; x++ )
     {
         for (unsigned int y {0}; y < SIZE; y++)
@@ -147,7 +155,6 @@ vector<Color> Newton::generateFractal(const dbl window[2][2])
                     fractal[index].setColor(c,BLUE);
                     break;
                 case 1:
-
                     fractal[index].setColor(c,CYAN);
                     break;
                 case 2:
@@ -165,7 +172,6 @@ vector<Color> Newton::generateFractal(const dbl window[2][2])
                 default:
                     fractal[index].setColor(c,DEFAULT);
             }
-            
         }
     }
     return fractal;

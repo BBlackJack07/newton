@@ -34,7 +34,7 @@ class Newton
         unsigned int min_dist_index(const comp& z);
         comp getcomp(unsigned int x, unsigned int y, const dbl window[2][2]);
         vector<Color> generateFractal(const dbl window[2][2] = DEF_WINDOW);
-        vector<comp> polyFromRoots();
+        static vector<comp> polyFromRoots(const vector<comp> & roots);
         static vector<comp> nth_roots(int n);
         static vector<comp> derive(const vector<comp> & p);
         static comp horner(const vector<comp> & p, const comp & z); 
@@ -45,7 +45,8 @@ class Newton
         const dbl SIZE_D;
         const unsigned int N;
         const dbl EPS;
-        vector<comp> roots;
+        dbl bright_exponent;
+        vector<comp> roots,p,d;
 };
 
 

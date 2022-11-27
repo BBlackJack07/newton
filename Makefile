@@ -10,7 +10,7 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	g++ $(CXX_OPT) $(OBJS) -o $@
 
-$(OBJS): $(HEADERS) $(SRCS)
+$(OBJS): $(HEADERS)
 
 .cpp.o:
 	g++ $(CXX_OPT) -c $< -o $@

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-typedef long double dbl;
+typedef double dbl;
 typedef complex<dbl> comp;
 
 struct Color {
@@ -15,17 +15,32 @@ struct Color {
         unsigned char red,green,blue;    
 };
 
-constexpr unsigned int SIZE {8192};
-constexpr dbl SIZE_D { static_cast<dbl>(SIZE) };
-constexpr unsigned int N {70};
-constexpr dbl EPS {1e-10};
+class Newton
+{
 
-vector<comp> polyFromRoots(const vector<comp> & roots);
-comp horner(const vector<comp> & p, const comp & z);
-vector<comp> derive(const vector<comp> & p);
+    public:
+        Newton(const vector<comp> & roots);
+        Newton(const vector<comp> & roots, unsigned int size, unsigned int max_iteration);
+        Newton(int n, unsigned int size, unsigned int max_iteration);
+        dbl dist(const comp & z);
+        unsigned int min_dist_index(const comp& z);
+        comp getcomp(unsigned int x, unsigned int y);
+        vector<Color> generateFractal();
+        vector<comp> polyFromRoots();
+        static vector<comp> nth_roots(int n);
+        static vector<comp> derive(const vector<comp> & p);
+        static comp horner(const vector<comp> & p, const comp & z); 
+        unsigned int size();
 
-dbl dist(const comp & z, const vector<comp> & roots);
+    private:
+        unsigned int SIZE;
+        dbl SIZE_D;
+        unsigned int N;
+        dbl EPS;
+        vector<comp> roots;
+};
 
-vector<Color> newton(const vector<comp> & roots);
+
+
 
 #endif

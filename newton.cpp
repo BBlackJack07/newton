@@ -1,6 +1,15 @@
 #include "newton.hpp"
 
-vector<comp> polyFromRoots(const vector<comp> & roots)
+Newton::Newton(const vector<comp> & roots)
+    :roots(roots), SIZE(2048), N(50), EPS(1e-8), SIZE_D(static_cast<dbl>(SIZE)) {}
+
+Newton::Newton(const vector<comp> & roots, unsigned int size, unsigned int max_iteration)
+    :roots(roots), SIZE(size), N(max_iteration), EPS(1e-8), SIZE_D(static_cast<dbl>(size)) {}
+
+Newton::Newton(int n, unsigned int size, unsigned int max_iteration)
+    :roots(Newton::nth_roots(n)), SIZE(size), N(max_iteration), EPS(1e-8), SIZE_D(static_cast<dbl>(size)) {}
+
+vector<comp> Newton::polyFromRoots()
 {
     auto n = roots.size(); 
     vector<comp> p(n+1,0.);
@@ -15,7 +24,7 @@ vector<comp> polyFromRoots(const vector<comp> & roots)
     return p;
 }
 
-comp horner(const vector<comp> & p, const comp & z)
+comp Newton::horner(const vector<comp> & p, const comp & z)
 {
     comp s = p[0];
     for (unsigned int i {1}; i < p.size(); i++)
@@ -26,7 +35,7 @@ comp horner(const vector<comp> & p, const comp & z)
     return s;
 }
 
-vector<comp> derive(const vector<comp> & p)
+vector<comp> Newton::derive(const vector<comp> & p)
 {
     unsigned int n = p.size() - 1;
     vector<comp> d(n);
@@ -35,7 +44,7 @@ vector<comp> derive(const vector<comp> & p)
     return d;
 }
 
-dbl dist(const comp& z, const vector<comp>& roots)
+dbl Newton::dist(const comp& z)
 {
     dbl m { norm(z-roots[0]) };
     for (unsigned int i {1}; i < roots.size(); i++)
@@ -47,7 +56,7 @@ dbl dist(const comp& z, const vector<comp>& roots)
     return m;
 }
 
-unsigned int min_dist_index(const comp& z, const vector<comp>& roots)
+unsigned int Newton::min_dist_index(const comp& z)
 {
     dbl m { norm(z-roots[0]) };
     unsigned int m_index {0};
@@ -62,17 +71,32 @@ unsigned int min_dist_index(const comp& z, const vector<comp>& roots)
     return m_index;
 }
 
-comp getcomp(unsigned int x, unsigned int y)
+comp Newton::getcomp(unsigned int x, unsigned int y)
 {
     dbl re { (static_cast<dbl>(x) - SIZE_D / 2.)*4./SIZE_D };
     dbl im { (static_cast<dbl>(y) - SIZE_D / 2.)*4./SIZE_D };
-    return re + 1il * im;
+    return re + 1i * im;
 }
 
-vector<Color> newton(const vector<comp> & roots)
+unsigned int Newton::size()
+{
+    return SIZE;
+}
+
+vector<comp> Newton::nth_roots(int n)
+{
+    vector<comp> roots;
+    for (int k {0}; k < n; k++)
+    {
+        roots.push_back( exp( 2. * M_PI * static_cast<dbl>(k)/static_cast<dbl>(n) * 1i )  );
+    }
+    return roots;
+}
+
+vector<Color> Newton::generateFractal()
 {
     vector<Color> fractal(SIZE*SIZE);
-    vector<comp> p(polyFromRoots(roots));
+    vector<comp> p(polyFromRoots());
     vector<comp> d(derive(p));
     dbl eps2 = EPS*EPS;
     for (unsigned int x {0}; x < SIZE; x++ )
@@ -82,27 +106,30 @@ vector<Color> newton(const vector<comp> & roots)
             // Computation
             comp z = getcomp(x,y);
             unsigned int k {0};
-            while (k++<N && dist(z,roots)>eps2)
+            while (k++<N && dist(z)>eps2)
                 z -= horner(p,z)/horner(d,z);
             // Determine color
-            unsigned char c { static_cast<unsigned char>(255./pow(static_cast<dbl>(k+1),1./3.)) };
-            auto i { min_dist_index(z,roots) % roots.size() };
+            unsigned char c { static_cast<unsigned char>(255./pow(static_cast<dbl>(k+1),3./7.)) };
+            auto i { min_dist_index(z) % roots.size() };
             switch (i) {
                 case 0:
-                    fractal[x*SIZE + y].red = c;
+                    fractal[x*SIZE + y].blue = c;
                     break;
                 case 1:
                     fractal[x*SIZE + y].green = c;
+                    fractal[x*SIZE + y].blue = c;
                     break;
                 case 2:
+                    fractal[x*SIZE + y].green = c;
                     fractal[x*SIZE + y].blue = c;
+                    fractal[x*SIZE + y].red = c;
                     break;
                 case 3:
                     fractal[x*SIZE + y].blue = c;
                     fractal[x*SIZE + y].red = c;
                     break;
                 default:
-                    fractal[x*SIZE + y].green = c;
+                    fractal[x*SIZE + y].green = c/2;
                     fractal[x*SIZE + y].red = c;
             }
             

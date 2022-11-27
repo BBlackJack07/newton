@@ -3,23 +3,27 @@
 #include "bitmap_image.hpp"
 #include <cmath>
 
+void draw(const vector<Color> & matrix, unsigned int size, string path);
+
 int main(void)
 {
-    bitmap_image image(SIZE,SIZE);
-    int n {3};
-    vector<comp> roots;
-    for (int k {0}; k < n; k++)
+    Newton newt(5,4096,70);
+    vector<Color> fract(newt.generateFractal());
+    
+    draw(fract,newt.size(),"masterclass.bmp");
+    return 0;
+}
+
+void draw(const vector<Color> & data, unsigned int size, string path)
+{
+    bitmap_image image(size,size);
+    for (unsigned int x {0}; x < size; x++)
     {
-        roots.push_back( exp( 2.l * M_PI * static_cast<dbl>(k)/static_cast<dbl>(n) * 1il )  );
-    }
-    vector<Color> fract(newton(roots));
-    for (unsigned int x {0}; x < SIZE; x++)
-    {
-        for (unsigned int y {0}; y < SIZE; y++)
+        for (unsigned int y {0}; y < size ; y++)
         {
-            image.set_pixel(x,y,fract[x*SIZE + y]);
+            image.set_pixel(x,y,data[x*size + y]);
         }
     }
-    image.save_image("masterclass.bmp");
-    return 0;
+    image.save_image(path);
+
 }

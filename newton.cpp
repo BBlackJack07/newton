@@ -64,9 +64,9 @@ unsigned int min_dist_index(const comp& z, const vector<comp>& roots)
 
 comp getcomp(unsigned int x, unsigned int y)
 {
-    dbl re { (static_cast<dbl>(x) - SIZE_D / 2.)*2./SIZE_D };
-    dbl im { (static_cast<dbl>(y) - SIZE_D / 2.)*2./SIZE_D };
-    return re + 1i * im;
+    dbl re { (static_cast<dbl>(x) - SIZE_D / 2.)*4./SIZE_D };
+    dbl im { (static_cast<dbl>(y) - SIZE_D / 2.)*4./SIZE_D };
+    return re + 1il * im;
 }
 
 vector<Color> newton(const vector<comp> & roots)
@@ -85,7 +85,7 @@ vector<Color> newton(const vector<comp> & roots)
             while (k++<N && dist(z,roots)>eps2)
                 z -= horner(p,z)/horner(d,z);
             // Determine color
-            unsigned char c { static_cast<unsigned char>(255./sqrt(static_cast<dbl>(k+1))) };
+            unsigned char c { static_cast<unsigned char>(255./pow(static_cast<dbl>(k+1),1./3.)) };
             auto i { min_dist_index(z,roots) % roots.size() };
             switch (i) {
                 case 0:

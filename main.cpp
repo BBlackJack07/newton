@@ -1,13 +1,17 @@
 #include <iostream>
 #include "newton.hpp"
 #include "bitmap_image.hpp"
+#include <cmath>
 
 int main(void)
 {
     bitmap_image image(SIZE,SIZE);
-    //comp j = -0.5 + 1i*(sqrt(3.)/2.);
-    vector<comp> roots({ 1i, -1i, -1., 1. });
-    //vector<comp> roots({ j, pow(j,2), 1 });
+    int n {3};
+    vector<comp> roots;
+    for (int k {0}; k < n; k++)
+    {
+        roots.push_back( exp( 2.l * M_PI * static_cast<dbl>(k)/static_cast<dbl>(n) * 1il )  );
+    }
     vector<Color> fract(newton(roots));
     for (unsigned int x {0}; x < SIZE; x++)
     {

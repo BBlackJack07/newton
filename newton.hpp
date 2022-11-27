@@ -17,8 +17,8 @@ struct Color {
 
 constexpr unsigned int SIZE {4096};
 constexpr dbl SIZE_D { static_cast<dbl>(SIZE) };
-constexpr unsigned int N {70};
-constexpr dbl EPS {1e-10};
+constexpr unsigned int N {50};
+constexpr dbl EPS {1e-8};
 
 vector<comp> polyFromRoots(const vector<comp> & roots);
 comp horner(const vector<comp> & p, const comp & z);

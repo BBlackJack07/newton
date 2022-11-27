@@ -1,19 +1,21 @@
 #include <iostream>
-#include <fstream>
 #include "newton.hpp"
+#include "bitmap_image.hpp"
 
 int main(void)
 {
-    ofstream file("newt.txt");
-    comp j = -0.5 + 1i*(sqrt(3.)/2.);
+    bitmap_image image(SIZE,SIZE);
+    //comp j = -0.5 + 1i*(sqrt(3.)/2.);
     vector<comp> roots({ 1i, -1i, -1., 1. });
     //vector<comp> roots({ j, pow(j,2), 1 });
     vector<Color> fract(newton(roots));
-    file << SIZE << endl;
-    for (auto it = fract.begin(); it != fract.end(); it++)
+    for (unsigned int x {0}; x < SIZE; x++)
     {
-        file << (unsigned int)(it->red) << "," << (unsigned int)(it->green) << "," << (unsigned int)(it->blue) << endl;
+        for (unsigned int y {0}; y < SIZE; y++)
+        {
+            image.set_pixel(x,y,fract[x*SIZE + y]);
+        }
     }
-    file.close();
+    image.save_image("masterclass.bmp");
     return 0;
 }

@@ -37,10 +37,10 @@ vector<comp> derive(const vector<comp> & p)
 
 dbl dist(const comp& z, const vector<comp>& roots)
 {
-    dbl m { abs(z-roots[0]) };
+    dbl m { norm(z-roots[0]) };
     for (unsigned int i {1}; i < roots.size(); i++)
     {
-        dbl d {abs(z-roots[i])};
+        dbl d {norm(z-roots[i])};
         if (m>d)
             m = d;
     }
@@ -49,11 +49,11 @@ dbl dist(const comp& z, const vector<comp>& roots)
 
 unsigned int min_dist_index(const comp& z, const vector<comp>& roots)
 {
-    dbl m { abs(z-roots[0]) };
+    dbl m { norm(z-roots[0]) };
     unsigned int m_index {0};
     for (unsigned int i {1}; i < roots.size(); i++)
     {
-        dbl d {abs(z-roots[i])};
+        dbl d {norm(z-roots[i])};
         if (m>d) {
             m = d;
             m_index = i;
@@ -64,8 +64,8 @@ unsigned int min_dist_index(const comp& z, const vector<comp>& roots)
 
 comp getcomp(unsigned int x, unsigned int y)
 {
-    dbl re { (static_cast<dbl>(x) - SIZE_D / 2.)*4./SIZE_D };
-    dbl im { (static_cast<dbl>(y) - SIZE_D / 2.)*4./SIZE_D };
+    dbl re { (static_cast<dbl>(x) - SIZE_D / 2.)*2./SIZE_D };
+    dbl im { (static_cast<dbl>(y) - SIZE_D / 2.)*2./SIZE_D };
     return re + 1i * im;
 }
 
@@ -74,19 +74,19 @@ vector<Color> newton(const vector<comp> & roots)
     vector<Color> fractal(SIZE*SIZE);
     vector<comp> p(polyFromRoots(roots));
     vector<comp> d(derive(p));
+    dbl eps2 = EPS*EPS;
     for (unsigned int x {0}; x < SIZE; x++ )
     {
         for (unsigned int y {0}; y < SIZE; y++)
         {
+            // Computation
             comp z = getcomp(x,y);
             unsigned int k {0};
-            while (k<N && dist(z,roots)>EPS)
-            {
+            while (k++<N && dist(z,roots)>eps2)
                 z -= horner(p,z)/horner(d,z);
-                k++;
-            }
+            // Determine color
             unsigned char c { static_cast<unsigned char>(255./sqrt(static_cast<dbl>(k+1))) };
-            unsigned int i { min_dist_index(z,roots) % 4 };
+            auto i { min_dist_index(z,roots) % roots.size() };
             switch (i) {
                 case 0:
                     fractal[x*SIZE + y].red = c;
@@ -101,7 +101,9 @@ vector<Color> newton(const vector<comp> & roots)
                     fractal[x*SIZE + y].blue = c;
                     fractal[x*SIZE + y].red = c;
                     break;
-
+                default:
+                    fractal[x*SIZE + y].green = c;
+                    fractal[x*SIZE + y].red = c;
             }
             
         }

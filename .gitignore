@@ -3,4 +3,5 @@
 *.PNG
 *.txt
 *.o
+*.bmp
 __pycache__/**

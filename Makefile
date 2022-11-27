@@ -2,7 +2,7 @@ CXX=g++
 CXX_OPT=-march=native -O2
 SRCS=newton.cpp main.cpp
 OBJS=$(SRCS:.cpp=.o)
-HEADERS=newton.hpp
+HEADERS=newton.hpp bitmap_image.hpp
 TARGET=newton.out
 
 all: $(TARGET) $(SRCS) $(HEADERS)

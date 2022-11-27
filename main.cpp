@@ -6,9 +6,10 @@ void draw(const vector<Color> & matrix, unsigned int size, string path);
 int main(void)
 {
     //Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1.5 - 1.5i},4096,50);
-    Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1. - 1i, 1.1 - 1.1i},4096,50);
+    Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1. - 1i, 1.1 - 1.1i},1024);
 
-    vector<Color> fract(newt.generateFractal());
+    dbl window[2][2] = {{-0.4,0.2},{-1.,-0.4}}; // Intervals should have the same length
+    vector<Color> fract(newt.generateFractal(window));
     
     draw(fract,newt.size(),"masterclass.bmp");
     return 0;
@@ -21,7 +22,7 @@ void draw(const vector<Color> & data, unsigned int size, string path)
     {
         for (unsigned int y {0}; y < size ; y++)
         {
-            image.set_pixel(x,y,data[x*size + y]);
+            image.set_pixel(x,size-1-y,data[x*size + y]);
         }
     }
     image.save_image(path);

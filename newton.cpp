@@ -32,9 +32,6 @@ void Color::setColor(unsigned char c, colors color)
     }
 }
 
-Newton::Newton(const vector<comp> & roots)
-    :roots(roots), SIZE(2048), N(50), EPS(1e-8), SIZE_D(static_cast<dbl>(SIZE)) {}
-
 Newton::Newton(const vector<comp> & roots, unsigned int size, unsigned int max_iteration)
     :roots(roots), SIZE(size), N(max_iteration), EPS(1e-8), SIZE_D(static_cast<dbl>(size)) {}
 
@@ -103,10 +100,10 @@ unsigned int Newton::min_dist_index(const comp& z)
     return m_index;
 }
 
-comp Newton::getcomp(unsigned int x, unsigned int y)
+comp Newton::getcomp(unsigned int x, unsigned int y, const dbl window[2][2])
 {
-    dbl re { (static_cast<dbl>(x) - SIZE_D / 2.)*4./SIZE_D };
-    dbl im { (static_cast<dbl>(y) - SIZE_D / 2.)*4./SIZE_D };
+    dbl re { window[0][0] + (window[0][1] - window[0][0] ) * static_cast<dbl>(x)/SIZE_D };
+    dbl im { window[1][0] + (window[1][1] - window[1][0] ) * static_cast<dbl>(y)/SIZE_D };
     return re + 1i * im;
 }
 
@@ -125,7 +122,7 @@ vector<comp> Newton::nth_roots(int n)
     return roots;
 }
 
-vector<Color> Newton::generateFractal()
+vector<Color> Newton::generateFractal(const dbl window[2][2])
 {
     vector<Color> fractal(SIZE*SIZE);
     vector<comp> p(polyFromRoots());
@@ -136,7 +133,7 @@ vector<Color> Newton::generateFractal()
         for (unsigned int y {0}; y < SIZE; y++)
         {
             // Computation
-            comp z = getcomp(x,y);
+            comp z = getcomp(x,y,window);
             unsigned int k {0};
             while (k++<N && dist(z)>eps2)
                 z -= horner(p,z)/horner(d,z);

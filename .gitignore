@@ -5,3 +5,4 @@
 *.o
 *.bmp
 __pycache__/**
+.vscode/**

@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <complex>
+#include <thread>
+#include <utility>
 
 using namespace std;
 
@@ -34,6 +36,7 @@ class Newton
         unsigned int min_dist_index(const comp& z);
         comp getcomp(unsigned int x, unsigned int y, const dbl window[2][2]);
         vector<Color> generateFractal(const dbl window[2][2] = DEF_WINDOW);
+        void compute_fractal(vector<Color> & fractal, const dbl window[2][2], unsigned int start, unsigned int end);
         static vector<comp> polyFromRoots(const vector<comp> & roots);
         static vector<comp> nth_roots(int n);
         static vector<comp> derive(const vector<comp> & p);

@@ -132,12 +132,10 @@ vector<comp> Newton::nth_roots(int n)
     return roots;
 }
 
-vector<Color> Newton::generateFractal(const dbl window[2][2])
+void Newton::compute_fractal(vector<Color> & fractal, const dbl window[2][2], unsigned int start, unsigned int end)
 {
-    vector<Color> fractal(SIZE*SIZE);
     dbl eps2 = EPS*EPS;
-
-    for (unsigned int x {0}; x < SIZE; x++ )
+    for (unsigned int x {start}; x < end; x++ )
     {
         for (unsigned int y {0}; y < SIZE; y++)
         {
@@ -174,6 +172,15 @@ vector<Color> Newton::generateFractal(const dbl window[2][2])
             }
         }
     }
+}
+
+vector<Color> Newton::generateFractal(const dbl window[2][2])
+{
+    vector<Color> fractal(SIZE*SIZE);
+    thread t1(&Newton::compute_fractal,this,ref(fractal),window,0,SIZE/2);
+    thread t2(&Newton::compute_fractal,this,ref(fractal),window,SIZE/2,SIZE);
+    t1.join();
+    t2.join();
     return fractal;
 }
 

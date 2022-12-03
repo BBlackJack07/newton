@@ -33,7 +33,7 @@ void Color::setColor(unsigned char c, colors color)
 }
 
 Newton::Newton(const vector<comp> & roots_list, unsigned int size, unsigned int max_iteration, dbl eps)
-    :roots(roots_list), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size))
+    :roots(roots_list), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size)) 
 {
     bright_exponent = 1./static_cast<dbl>(roots.size()/2+1);
     p = Newton::polyFromRoots(roots);
@@ -132,10 +132,10 @@ vector<comp> Newton::nth_roots(int n)
     return roots;
 }
 
-void Newton::compute_fractal(vector<Color> & fractal, const dbl window[2][2], unsigned int start, unsigned int end)
+void Newton::compute_fractal(vector<Color> & fractal, const dbl window[2][2], unsigned int x0, unsigned int xf)
 {
     dbl eps2 = EPS*EPS;
-    for (unsigned int x {start}; x < end; x++ )
+    for (unsigned int x {x0}; x < xf; x++ )
     {
         for (unsigned int y {0}; y < SIZE; y++)
         {
@@ -177,10 +177,17 @@ void Newton::compute_fractal(vector<Color> & fractal, const dbl window[2][2], un
 vector<Color> Newton::generateFractal(const dbl window[2][2])
 {
     vector<Color> fractal(SIZE*SIZE);
-    thread t1(&Newton::compute_fractal,this,ref(fractal),window,0,SIZE/2);
-    thread t2(&Newton::compute_fractal,this,ref(fractal),window,SIZE/2,SIZE);
-    t1.join();
-    t2.join();
+    const auto processor_count = std::thread::hardware_concurrency();
+    if (SIZE>=2048 && processor_count >= 2) {
+        thread t1(&Newton::compute_fractal,this,ref(fractal),window,0,SIZE/2);
+        thread t2(&Newton::compute_fractal,this,ref(fractal),window,SIZE/2,SIZE);
+        t1.join();
+        t2.join();
+    }
+    else {
+        compute_fractal(fractal, window, 0, SIZE);
+    }
+    
     return fractal;
 }
 

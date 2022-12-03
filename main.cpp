@@ -6,7 +6,7 @@ void draw(const vector<Color> & matrix, unsigned int size, string path);
 int main(void)
 {
     //Newton newt({(-1. - 1i)/sqrt(2.), (1. + 1i)/sqrt(2.), 1.5 - 1.5i},4096,50);
-    Newton newt(4,4096);
+    Newton newt(4,2048);
     dbl window[2][2] = {{-1.,1.},
                         {-1.,1.}};
     vector<Color> fract(newt.generateFractal(window));

@@ -1,3 +1,19 @@
+/*
+ *****************************************************************************
+ *                                                                           *
+ *                    Newton Fractal Generator                               *
+ *                                                                           *
+ * Author: Bastien Brunel - 2022                                             *
+ *                                                                           *
+ * Copyright notice:                                                         *
+ * Free use of the Newton Fractal Generator                                  *
+ * is permitted under the guidelines and in accordance with the most current *
+ * version of the MIT License.                                               *
+ * https://www.opensource.org/licenses/MIT                                   *
+ *                                                                           *
+ *****************************************************************************
+*/
+
 #include "newton.hpp"
 
 void Color::setColor(unsigned char c, colors color)

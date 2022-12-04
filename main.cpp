@@ -9,6 +9,6 @@ int main(void)
     dbl window[2][2] = {{-1.,1.},
                         {-1.,1.}};
     newt.generateFractal(window);
-    //draw(newt,"masterclass.bmp");
+    newt.draw("masterclass.bmp");
     return 0;
 }

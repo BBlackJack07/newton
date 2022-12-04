@@ -190,7 +190,7 @@ void Newton::generateFractal(const dbl window[2][2])
     }
 }
 
-void draw(std::string path)
+void Newton::draw(std::string path)
 {
     bitmap_image image(SIZE,SIZE);
     for (unsigned int x {0}; x < SIZE; x++)

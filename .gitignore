@@ -6,3 +6,8 @@
 *.bmp
 __pycache__/**
 .vscode/**
+*.exe
+*.tar.xz
+*.tar
+*.zip
+Makefile0

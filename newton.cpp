@@ -177,7 +177,7 @@ void Newton::compute_fractal(const dbl window[2][2], unsigned int x0, unsigned i
     }
 }
 
-vector<Color> Newton::generateFractal(const dbl window[2][2])
+void Newton::generateFractal(const dbl window[2][2])
 {
     const auto processor_count = std::thread::hardware_concurrency();
     if (SIZE>=2048 && processor_count >= 2) {
@@ -188,6 +188,18 @@ vector<Color> Newton::generateFractal(const dbl window[2][2])
     else {
         compute_fractal(window, 0, SIZE);
     }
+}
 
-    return fractal;
+void draw(std::string path)
+{
+    bitmap_image image(SIZE,SIZE);
+    for (unsigned int x {0}; x < SIZE; x++)
+    {
+        auto row { x * SIZE };
+        for (unsigned int y {0}; y < SIZE; y++)
+        {
+            image.set_pixel(x,SIZE-1-y,fractal[row + y]);
+        }
+    }
+    image.save_image(path);
 }

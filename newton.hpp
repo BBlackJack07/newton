@@ -4,6 +4,7 @@
 #include <vector>
 #include <complex>
 #include <thread>
+#include "bitmap_image.hpp"
 
 using namespace std;
 
@@ -34,13 +35,14 @@ class Newton
         dbl dist(const comp & z);
         unsigned int min_dist_index(const comp& z);
         comp getcomp(unsigned int x, unsigned int y, const dbl window[2][2]);
-        vector<Color> generateFractal(const dbl window[2][2] = DEF_WINDOW);
+        void generateFractal(const dbl window[2][2] = DEF_WINDOW);
         void compute_fractal(const dbl window[2][2], unsigned int , unsigned int);
         static vector<comp> polyFromRoots(const vector<comp> & roots);
         static vector<comp> nth_roots(int n);
         static vector<comp> derive(const vector<comp> & p);
         static comp horner(const vector<comp> & p, const comp & z); 
         unsigned int size();
+        void draw(string path);
 
     private:
         const unsigned int SIZE;

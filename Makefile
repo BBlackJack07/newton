@@ -1,8 +1,8 @@
 CXX=g++
-CXX_OPT=-march=native -O2 -pthread -std=c++17
-SRCS=newton.cpp main.cpp
+CXX_OPT=-march=native -O2 -std=c++17
+SRCS=newton.cpp draw.cpp main.cpp
 OBJS=$(SRCS:.cpp=.o)
-HEADERS=newton.hpp bitmap_image.hpp
+HEADERS=newton.hpp bitmap_image.hpp draw.hpp
 TARGET=newton.out
 
 all: $(TARGET)

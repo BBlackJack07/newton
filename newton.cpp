@@ -33,17 +33,19 @@ void Color::setColor(unsigned char c, colors color)
 }
 
 Newton::Newton(const vector<comp> & roots_list, unsigned int size, unsigned int max_iteration, dbl eps)
-    :roots(roots_list), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size)) 
+    :roots(roots_list), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size)), fractal(size*size)
 {
-    bright_exponent = 1./static_cast<dbl>(roots.size()/2+1);
+    //bright_exponent = 1./static_cast<dbl>(roots.size()/2+1);
+    bright_exponent = 1. / 2.;
     p = Newton::polyFromRoots(roots);
     d = Newton::derive(p);
 }
 
 Newton::Newton(int n, unsigned int size, unsigned int max_iteration, dbl eps)
-    :roots(Newton::nth_roots(n)), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size))
+    :roots(Newton::nth_roots(n)), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size)), fractal(size*size)
 {
-    bright_exponent = 1./static_cast<dbl>(roots.size()/2+1);
+    //bright_exponent = 1./static_cast<dbl>(roots.size()/2+1);
+    bright_exponent = 1. / 2.;
     p = Newton::polyFromRoots(roots);
     d = Newton::derive(p);
 }
@@ -132,11 +134,12 @@ vector<comp> Newton::nth_roots(int n)
     return roots;
 }
 
-void Newton::compute_fractal(vector<Color> & fractal, const dbl window[2][2], unsigned int x0, unsigned int xf)
+void Newton::compute_fractal(const dbl window[2][2], unsigned int x0, unsigned int xf)
 {
     dbl eps2 = EPS*EPS;
     for (unsigned int x {x0}; x < xf; x++ )
     {
+        auto row {x * SIZE};
         for (unsigned int y {0}; y < SIZE; y++)
         {
             // Computation
@@ -145,9 +148,9 @@ void Newton::compute_fractal(vector<Color> & fractal, const dbl window[2][2], un
             while (k++<N && dist(z)>eps2)
                 z -= horner(p,z)/horner(d,z);
             // Determine color
-            unsigned char c { static_cast<unsigned char>(255./pow(static_cast<dbl>(k+1), bright_exponent)) };
+            unsigned char c { static_cast<unsigned char>(400./pow(static_cast<dbl>(k+1), bright_exponent)) };
             auto i { min_dist_index(z) % roots.size() };
-            auto index {x*SIZE +y};
+            auto index {row + y};
             switch (i) {
                 case 0:
                     fractal[index].setColor(c,BLUE);
@@ -176,18 +179,15 @@ void Newton::compute_fractal(vector<Color> & fractal, const dbl window[2][2], un
 
 vector<Color> Newton::generateFractal(const dbl window[2][2])
 {
-    vector<Color> fractal(SIZE*SIZE);
     const auto processor_count = std::thread::hardware_concurrency();
     if (SIZE>=2048 && processor_count >= 2) {
-        thread t1(&Newton::compute_fractal,this,ref(fractal),window,0,SIZE/2);
-        thread t2(&Newton::compute_fractal,this,ref(fractal),window,SIZE/2,SIZE);
+        thread t1(&Newton::compute_fractal,this,window,0,SIZE/2);
+        compute_fractal(window, SIZE/2, SIZE);
         t1.join();
-        t2.join();
     }
     else {
-        compute_fractal(fractal, window, 0, SIZE);
+        compute_fractal(window, 0, SIZE);
     }
-    
+
     return fractal;
 }
-

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include "newton.hpp"
 
 using namespace std;
@@ -12,6 +13,7 @@ int main(void)
                         {-2.,2.}};
     vector<comp> roots;
     unsigned int size {0};
+    int nb_random_roots { 0 };
     showMenu(0);
     int answer {1};
     cin >> answer;
@@ -30,14 +32,18 @@ int main(void)
             roots.push_back(re+im*1i);
         }
     }
-    else 
+    else if (answer == 2)
     {
         showMenu(2);
         int n {0};
         cin >> n;
         roots = Newton::nth_roots(n);
     }
-
+    else 
+    {   
+        showMenu(1);
+        cin >> nb_random_roots;
+    } 
     showMenu(4);
     char answer2 {'\0'};
     cin >> answer2;
@@ -52,6 +58,19 @@ int main(void)
         cout << "Y-axis max? ";
         cin >> window[1][1];
         cout << endl;
+    }
+    if (nb_random_roots > 0 && roots.size() == 0)
+    {
+        std::uniform_real_distribution<dbl> unif_re(window[0][0],window[0][1]);
+        std::uniform_real_distribution<dbl> unif_im(window[0][0],window[0][1]);
+        std::default_random_engine gen(std::random_device{}());
+        for (int i { 0 }; i < nb_random_roots; i++)
+        {
+            comp z;
+            z.real(unif_re(gen));
+            z.imag(unif_im(gen));
+            roots.push_back(z);
+        }
     }
     showMenu(5);
     cin >> size;
@@ -71,8 +90,9 @@ void showMenu(int n)
             cout << "   ############################" << endl;
             cout << "   # Newton Fractal generator #" << endl;
             cout << "   ############################" << endl;
-            cout << "What do you want ? (1 or 2)" << endl;
+            cout << "What do you want ? (1, 2 or 3)" << endl;
             cout << "  1/ Manually enter fractal roots." << endl << "  2/ Use n-th roots." << endl;
+            cout << "  3/ Use random roots." << endl;
             break;
         case 1:
             cout << "Chose number of roots: " << endl;

@@ -142,10 +142,10 @@ unsigned int Newton::size()
 
 vector<comp> Newton::nth_roots(int n)
 {
-    vector<comp> roots;
+    vector<comp> roots(n);
     for (int k {0}; k < n; k++)
     {
-        roots.push_back( exp( 2. * M_PI * static_cast<dbl>(k)/static_cast<dbl>(n) * 1i )  );
+        roots[0] = polar( 2. * M_PI * static_cast<dbl>(k)/static_cast<dbl>(n) );
     }
     return roots;
 }

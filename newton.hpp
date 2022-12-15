@@ -27,7 +27,7 @@ using namespace std;
 typedef double dbl;
 typedef complex<dbl> comp;
 
-enum colors {BLUE,CYAN,GREY,PURPLE,GREENISH,MAGENTA,DEFAULT};
+enum colors {BLUE,CYAN,GREY,PURPLE,ORANGE,GREEN,MAGENTA,RED,DEFAULT};
 
 constexpr unsigned int DEF_SIZE { 2048 };
 constexpr unsigned int DEF_MAX_IT { 50 };
@@ -39,6 +39,7 @@ struct Color {
     public:
         Color() :red(0),green(0),blue(0) {}
         void setColor(unsigned char c, colors color);
+        static colors choseColor(int i);
         unsigned char red,green,blue;    
 };
 

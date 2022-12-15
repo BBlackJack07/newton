@@ -38,6 +38,7 @@ int main(void)
         int n {0};
         cin >> n;
         roots = Newton::nth_roots(n);
+        cout << roots.size() << endl;
     }
     else 
     {   
@@ -78,7 +79,7 @@ int main(void)
     if (roots.size() > 0) {
         Newton newt(roots,size);
         newt.generateFractal(window);
-        newt.draw("masterclass.bmp");
+        newt.draw("newton_fractal.bmp");
     }
     return 0;
 }

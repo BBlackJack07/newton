@@ -36,17 +36,57 @@ void Color::setColor(unsigned char c, colors color)
             this->blue=c;
             break;
         case PURPLE:
-            this->red = c/2;
+            this->red = c/3;
             this->blue = c;
             break;
-        case GREENISH:
+        case ORANGE:
+            this->red = c;
+            this->green = c/2;
+            break;
+        case GREEN:
             this->green=c;
-            this->blue=c/4;
+            break;
+        case RED:
+            this->red=c;
             break;
         default:
             this->red=c;
     }
 }
+
+colors Color::choseColor(int i)
+{
+    switch (i) {
+        case 0:
+            return MAGENTA;
+            break;
+        case 1:
+            return CYAN;
+            break;
+        case 2:
+            return GREY;
+            break;
+        case 3:
+            return BLUE;
+            break;
+        case 4:
+            return RED;
+            break;
+        case 5:
+            return GREEN;
+            break;
+        case 6:
+            return PURPLE;
+            break;
+        case 7:
+            return ORANGE;
+            break;
+        default:
+            return DEFAULT;
+    }
+}
+
+
 
 Newton::Newton(const vector<comp> & roots_list, unsigned int size, unsigned int max_iteration, dbl eps)
     :roots(roots_list), SIZE(size), N(max_iteration), EPS(eps), SIZE_D(static_cast<dbl>(size)), fractal(size*size)
@@ -145,7 +185,7 @@ vector<comp> Newton::nth_roots(int n)
     vector<comp> roots(n);
     for (int k {0}; k < n; k++)
     {
-        roots[0] = polar( 2. * M_PI * static_cast<dbl>(k)/static_cast<dbl>(n) );
+        roots[k] = polar(1., 2. * M_PI * static_cast<dbl>(k)/static_cast<dbl>(n) );
     }
     return roots;
 }
@@ -167,28 +207,7 @@ void Newton::compute_fractal(const dbl window[2][2], unsigned int x0, unsigned i
             unsigned char c { static_cast<unsigned char>(400./pow(static_cast<dbl>(k+1), bright_exponent)) };
             auto i { min_dist_index(z) % roots.size() };
             auto index {row + y};
-            switch (i) {
-                case 0:
-                    fractal[index].setColor(c,BLUE);
-                    break;
-                case 1:
-                    fractal[index].setColor(c,CYAN);
-                    break;
-                case 2:
-                    fractal[index].setColor(c,GREY);
-                    break;
-                case 3:
-                    fractal[index].setColor(c,MAGENTA);
-                    break;
-                case 4:
-                    fractal[index].setColor(c,PURPLE);
-                    break;
-                case 5:
-                    fractal[index].setColor(c,GREENISH);
-                    break;
-                default:
-                    fractal[index].setColor(c,DEFAULT);
-            }
+            fractal[index].setColor(c,Color::choseColor(i)); 
         }
     }
 }
@@ -219,3 +238,4 @@ void Newton::draw(std::string path)
     }
     image.save_image(path);
 }
+

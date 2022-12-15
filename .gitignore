@@ -11,3 +11,4 @@ __pycache__/**
 *.tar
 *.zip
 Makefile0
+test.cpp
